@@ -42,7 +42,7 @@
       "y": 490,
       "w": 680,
       "h": 460,
-      "label": "STRATEGIC TARGETING & UAE RELEVANCE",
+      "label": "CONFIRMED VICTIM PROFILE",
       "color": "#38bdf8"
     }
   ],
@@ -280,21 +280,21 @@
       "type": "org",
       "x": 1430,
       "y": 800,
-      "label": "Defense • aerospace",
-      "category": "military / strategic policy",
+      "label": "Defense • foreign affairs",
+      "category": "national security / strategic policy",
       "disp": "victim",
-      "notes": "Defense-linked experts and aerospace personnel have appeared in recent targeting, particularly during periods of regional tension."
+      "notes": "Defense and foreign-affairs specialists in the United States and Israel have appeared in public reporting, particularly during periods of heightened tension."
     },
     {
-      "id": "uae",
+      "id": "geographies",
       "type": "location",
       "x": 1650,
       "y": 875,
-      "label": "UAE / MENA relevance • WATCH",
-      "address": "AE history • UAE media impersonation",
-      "disp": "suspicious",
-      "effects": ["suspicious"],
-      "notes": "A commercial actor record includes the UAE among historical target regions. Public 2025 research also reports impersonation of the UAE-based Khaleej Times brand. This supports regional vigilance but does not establish a currently confirmed UAE victim or active UAE infrastructure."
+      "label": "Confirmed victim geographies",
+      "address": "United States • United Kingdom • Israel",
+      "disp": "victim",
+      "effects": ["compromised"],
+      "notes": "Public first-party reporting explicitly identifies targeting or confirmed cloud-account compromise involving victims in the United States, United Kingdom and Israel. Country labels are intentionally limited to places named in the cited evidence."
     }
   ],
   "edges": [
@@ -321,7 +321,7 @@
     {"id": "e21", "a": "targethub", "b": "civil", "label": "", "style": "dotted", "anim": false, "arrows": "end"},
     {"id": "e22", "a": "targethub", "b": "media", "label": "", "style": "dotted", "anim": false, "arrows": "end"},
     {"id": "e23", "a": "targethub", "b": "defense", "label": "", "style": "dotted", "anim": false, "arrows": "end"},
-    {"id": "e24", "a": "targethub", "b": "uae", "label": "regional relevance", "style": "dotted", "anim": false, "arrows": "end"}
+    {"id": "e24", "a": "targethub", "b": "geographies", "label": "reported victims", "style": "dotted", "anim": false, "arrows": "end"}
   ],
   "journey": {
     "steps": [
@@ -350,13 +350,13 @@
         "focus": true
       },
       {
-        "note": "Strategic targeting spans government, diplomacy, think tanks, academia, NGOs, media, activists, dissidents, defense and aerospace. UAE relevance is a watch condition, not proof of a current UAE victim.",
-        "show": ["z_targets", "targethub", "gov", "civil", "media", "defense", "uae", "e19", "e20", "e21", "e22", "e23", "e24"],
-        "highlight": ["targethub", "uae"],
+        "note": "Confirmed victim profiles span government and diplomacy, think tanks, academia, NGOs, media, activists, dissidents, defense and foreign affairs. Public reporting explicitly identifies the United States, United Kingdom and Israel.",
+        "show": ["z_targets", "targethub", "gov", "civil", "media", "defense", "geographies", "e19", "e20", "e21", "e22", "e23", "e24"],
+        "highlight": ["targethub", "geographies"],
         "focus": true
       },
       {
-        "note": "Full analytical view: trust-building enables either credential theft and cloud collection or malware-backed access. Keep alias equivalence, UAE relevance and infrastructure attribution evidence-graded.",
+        "note": "Full analytical view: trust-building enables either credential theft and cloud collection or malware-backed access. Alias equivalence, victim geography and infrastructure attribution remain evidence-graded.",
         "show": [],
         "highlight": [],
         "focus": true

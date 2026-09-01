@@ -3,214 +3,137 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive APT42 threat actor relationship and intrusion-path analysis.">
-  <title>APT42 Threat Actor Analysis</title>
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="Interactive APT42 intrusion, collection and victim-profile analysis.">
+  <meta property="og:title" content="APT42 — Intrusion &amp; Targeting Map">
+  <meta property="og:description" content="Explore APT42's human-led access, credential theft, cloud collection, malware and confirmed victim profile.">
+  <meta property="og:image" content="APT42_Threat_Actor_Analysis.png">
+  <title>APT42 — Intrusion &amp; Targeting Map</title>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #070b14;
-      --panel: rgba(15, 22, 38, .92);
-      --border: #25324b;
-      --text: #e5edf8;
-      --muted: #91a2bb;
-      --accent: #38bdf8;
-      --warn: #fb923c;
-    }
+    :root { color-scheme: dark; --bg:#05070d; --panel:rgba(9,14,25,.82); --line:rgba(137,161,196,.18); --line-strong:rgba(125,211,252,.35); --text:#f2f6fc; --muted:#8ea0ba; --cyan:#38bdf8; --violet:#c084fc; --amber:#fbbf24; --shadow:0 22px 70px rgba(0,0,0,.38); }
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    body {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 15% 15%, rgba(56,189,248,.08), transparent 32%),
-        radial-gradient(circle at 85% 80%, rgba(192,132,252,.07), transparent 36%),
-        var(--bg);
-      color: var(--text);
-      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    header {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      min-height: 68px;
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border);
-      background: var(--panel);
-      backdrop-filter: blur(14px);
-    }
-    .identity { min-width: 250px; }
-    .eyebrow {
-      color: var(--accent);
-      font-size: 10px;
-      font-weight: 750;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-    h1 { margin: 2px 0 0; font-size: clamp(17px, 2vw, 23px); line-height: 1.1; }
-    .subtitle { color: var(--muted); font-size: 12px; }
-    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
-    button, .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
-      padding: 0 11px;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      background: #111a2d;
-      color: var(--text);
-      font: inherit;
-      font-size: 12px;
-      font-weight: 650;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    button:hover, .button:hover { border-color: #486081; background: #16233a; }
-    .button.primary { border-color: #1e6086; background: #10324a; color: #7dd3fc; }
-    #viewer {
-      position: relative;
-      min-height: 0;
-      overflow: hidden;
-      touch-action: none;
-      cursor: grab;
-    }
-    #viewer.dragging { cursor: grabbing; }
-    #stage { width: 100%; height: 100%; }
-    #stage svg { width: 100%; height: 100%; display: block; }
-    .status {
-      position: absolute;
-      left: 16px;
-      bottom: 14px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      pointer-events: none;
-    }
-    .pill {
-      padding: 5px 9px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(9,14,25,.85);
-      color: var(--muted);
-      font-size: 11px;
-      backdrop-filter: blur(8px);
-    }
-    .pill.watch { border-color: rgba(251,146,60,.45); color: #fdba74; }
-    footer {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-height: 38px;
-      padding: 7px 18px;
-      border-top: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--muted);
-      font-size: 11px;
-    }
-    footer span:last-child { margin-left: auto; }
-    @media (max-width: 760px) {
-      header { align-items: flex-start; flex-direction: column; gap: 10px; }
-      .actions { margin-left: 0; }
-      footer { display: none; }
-    }
+    html,body { width:100%; height:100%; margin:0; }
+    body { overflow:hidden; background:radial-gradient(circle at 72% 16%,rgba(56,189,248,.09),transparent 28%),radial-gradient(circle at 24% 86%,rgba(192,132,252,.08),transparent 32%),linear-gradient(145deg,#070b13 0%,var(--bg) 52%,#060914 100%); color:var(--text); font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body::before { position:fixed; inset:0; z-index:-1; background-image:linear-gradient(rgba(126,156,193,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(126,156,193,.025) 1px,transparent 1px); background-size:38px 38px; content:""; mask-image:linear-gradient(to bottom,#000,transparent 85%); }
+    button,a { font:inherit; }
+    button:focus-visible,a:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+    .shell { display:grid; grid-template-rows:auto 1fr; height:100%; }
+    header { position:relative; z-index:20; display:grid; grid-template-columns:minmax(270px,1fr) auto auto; align-items:center; gap:24px; min-height:86px; padding:14px 20px; border-bottom:1px solid var(--line); background:rgba(5,8,15,.78); box-shadow:0 12px 40px rgba(0,0,0,.2); backdrop-filter:blur(18px) saturate(135%); }
+    header::after { position:absolute; right:0; bottom:-1px; left:0; height:1px; background:linear-gradient(90deg,transparent,rgba(56,189,248,.7),rgba(192,132,252,.45),transparent); content:""; }
+    .brand { display:flex; align-items:center; gap:13px; min-width:0; }
+    .mark { position:relative; display:grid; flex:0 0 46px; width:46px; height:46px; place-items:center; border:1px solid rgba(56,189,248,.42); border-radius:14px; background:linear-gradient(145deg,rgba(56,189,248,.16),rgba(192,132,252,.08)); color:#a5e3ff; box-shadow:inset 0 0 20px rgba(56,189,248,.08),0 0 30px rgba(56,189,248,.07); font-weight:850; letter-spacing:-.05em; }
+    .mark::after { position:absolute; inset:5px; border:1px solid rgba(255,255,255,.08); border-radius:9px; content:""; }
+    .eyebrow { color:var(--cyan); font-size:9px; font-weight:800; letter-spacing:.19em; text-transform:uppercase; }
+    h1 { overflow:hidden; margin:3px 0 0; font-size:clamp(17px,1.8vw,23px); line-height:1.05; letter-spacing:-.025em; text-overflow:ellipsis; white-space:nowrap; }
+    .subtitle { margin-top:4px; overflow:hidden; color:var(--muted); font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
+    .signal-strip { display:flex; gap:8px; }
+    .signal { min-width:118px; padding:8px 10px; border:1px solid var(--line); border-radius:11px; background:rgba(14,22,37,.58); }
+    .signal strong { display:block; color:#dce8f7; font-size:11px; font-weight:750; }
+    .signal span { display:block; margin-top:1px; color:var(--muted); font-size:9px; letter-spacing:.08em; text-transform:uppercase; }
+    .signal.confidence strong { color:#86efcf; } .signal.paths strong { color:#f9d477; } .signal.victims strong { color:#8bdcff; }
+    .header-actions { display:flex; align-items:center; gap:8px; }
+    .icon-button,.download-button { display:inline-grid; min-height:36px; place-items:center; border:1px solid var(--line); border-radius:10px; background:rgba(18,28,47,.72); color:#c7d4e6; text-decoration:none; cursor:pointer; transition:transform .18s ease,border-color .18s ease,background .18s ease,color .18s ease; }
+    .icon-button { width:36px; padding:0; font-size:17px; } .download-button { padding:0 12px; color:#b6e8ff; font-size:11px; font-weight:750; }
+    .icon-button:hover,.download-button:hover { transform:translateY(-1px); border-color:var(--line-strong); background:rgba(22,42,67,.9); color:#fff; }
+    main { position:relative; min-height:0; overflow:hidden; }
+    #viewer { position:absolute; inset:0; overflow:hidden; touch-action:none; cursor:grab; } #viewer.dragging { cursor:grabbing; }
+    #stage { width:100%; height:100%; opacity:0; transform:scale(.985); transition:opacity .65s ease,transform .65s ease; } #stage.ready { opacity:1; transform:scale(1); }
+    #stage svg { display:block; width:100%; height:100%; }
+    #stage .nodeg { cursor:crosshair; transition:opacity .22s ease,filter .22s ease; }
+    #stage .nodeg .card { transition:stroke .22s ease,filter .22s ease; }
+    #stage .nodeg:hover .card { stroke:#7dd3fc!important; filter:url(#nodeShadow) drop-shadow(0 0 9px rgba(56,189,248,.35)); }
+    #stage .nodeg.selected .card { stroke:#fff!important; filter:url(#nodeShadow) drop-shadow(0 0 12px rgba(125,211,252,.5)); }
+    #stage .edge path { transition:opacity .2s ease,stroke-width .2s ease; }
+    #stage .edge.flow path { animation:flow 1.25s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset:-24; } }
+    .glass { border:1px solid var(--line); background:var(--panel); box-shadow:var(--shadow); backdrop-filter:blur(18px) saturate(125%); }
+    .intel-card { position:absolute; top:18px; right:18px; z-index:10; width:min(310px,calc(100vw - 36px)); padding:15px; border-radius:16px; transition:opacity .25s ease,transform .25s ease; }
+    .intel-card.collapsed { transform:translateX(calc(100% + 32px)); opacity:0; pointer-events:none; }
+    .card-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .card-kicker { color:var(--cyan); font-size:9px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    .card-title { margin:4px 0 0; font-size:15px; letter-spacing:-.01em; }
+    .close-card { border:0; background:transparent; color:var(--muted); cursor:pointer; }
+    .assessment { margin:13px 0; color:#becbe0; font-size:12px; line-height:1.55; }
+    .facts { display:grid; gap:8px; }
+    .fact { display:grid; grid-template-columns:8px 1fr; gap:8px; align-items:start; color:var(--muted); font-size:10px; }
+    .fact i { width:6px; height:6px; margin-top:5px; border-radius:50%; background:var(--cyan); box-shadow:0 0 12px currentColor; }
+    .fact:nth-child(2) i { background:var(--amber); } .fact:nth-child(3) i { background:var(--violet); }
+    .source-line { margin-top:13px; padding-top:11px; border-top:1px solid var(--line); color:#6f829f; font-size:9px; }
+    .reopen-card { position:absolute; top:18px; right:18px; z-index:9; display:none; } .intel-card.collapsed + .reopen-card { display:inline-grid; }
+    .legend { position:absolute; left:18px; bottom:88px; z-index:8; display:flex; gap:12px; padding:8px 11px; border-radius:10px; color:var(--muted); font-size:9px; pointer-events:none; }
+    .legend span { display:inline-flex; align-items:center; gap:6px; } .legend i { display:inline-block; width:24px; height:0; border-top:2px solid #97a9bf; }
+    .legend .dashed { border-top-style:dashed; border-color:var(--amber); } .legend .dotted { border-top-style:dotted; border-color:var(--cyan); }
+    .story-dock { position:absolute; right:18px; bottom:16px; left:18px; z-index:12; display:flex; align-items:center; gap:7px; min-width:0; padding:8px; border-radius:15px; }
+    .dock-label { padding:0 9px; color:#6f829f; font-size:9px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; white-space:nowrap; }
+    .chapters { display:flex; gap:6px; min-width:0; overflow-x:auto; scrollbar-width:none; } .chapters::-webkit-scrollbar { display:none; }
+    .chapter { position:relative; min-height:38px; padding:0 13px; border:1px solid transparent; border-radius:10px; background:transparent; color:var(--muted); font-size:10px; font-weight:730; white-space:nowrap; cursor:pointer; transition:color .18s ease,background .18s ease,border-color .18s ease; }
+    .chapter::before { margin-right:7px; color:#51647f; content:attr(data-key); font-size:8px; }
+    .chapter:hover { color:#dce8f7; background:rgba(39,55,80,.35); }
+    .chapter.active { border-color:rgba(56,189,248,.32); background:rgba(56,189,248,.1); color:#bdeaff; } .chapter.active::before { color:var(--cyan); }
+    .dock-actions { display:flex; gap:5px; margin-left:auto; padding-left:6px; border-left:1px solid var(--line); } .dock-actions .icon-button { width:32px; min-height:32px; font-size:15px; }
+    .tooltip { position:absolute; z-index:30; display:none; width:min(260px,calc(100vw - 30px)); padding:11px 12px; border-radius:12px; pointer-events:none; }
+    .tooltip.visible { display:block; animation:tooltip-in .16s ease both; } .tooltip strong { display:block; color:#e8f2ff; font-size:11px; } .tooltip span { display:block; margin-top:4px; color:var(--muted); font-size:10px; line-height:1.45; }
+    @keyframes tooltip-in { from { opacity:0; transform:translateY(4px); } }
+    .loading { position:absolute; inset:0; display:grid; place-items:center; color:var(--muted); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+    @media (max-width:1080px) { header { grid-template-columns:1fr auto; } .signal-strip { display:none; } .intel-card { width:280px; } }
+    @media (max-width:700px) { header { min-height:72px; padding:10px 12px; gap:10px; } .mark { width:40px; height:40px; flex-basis:40px; border-radius:12px; } .subtitle { display:none; } .download-button { display:none; } .intel-card { top:10px; right:10px; width:min(275px,calc(100vw - 20px)); } .legend { display:none; } .story-dock { right:8px; bottom:8px; left:8px; } .dock-label,.dock-actions { display:none; } .chapters { width:100%; } .chapter { min-height:36px; padding:0 11px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="identity">
-      <div class="eyebrow">Threat actor analysis</div>
-      <h1>APT42 / CALANQUE ION</h1>
-      <div class="subtitle">Identity, access paths, collection, tooling and UAE relevance</div>
-    </div>
-    <div class="actions" aria-label="Viewer controls">
-      <button id="zoomOut" title="Zoom out">−</button>
-      <button id="fit" title="Fit diagram">Fit</button>
-      <button id="zoomIn" title="Zoom in">+</button>
-      <a class="button" href="APT42_Threat_Actor_Analysis.netdraw.json" download>NetDraw JSON</a>
-      <a class="button" href="APT42_Threat_Actor_Analysis.svg" download>SVG</a>
-      <a class="button primary" href="https://mr-r3b00t.github.io/net_draw/" target="_blank" rel="noopener">Edit in NetDraw</a>
-    </div>
-  </header>
-
-  <main id="viewer" aria-label="Interactive APT42 relationship graph">
-    <div id="stage" role="img" aria-label="APT42 threat actor analysis diagram"></div>
-    <div class="status">
-      <span class="pill">Drag to pan · wheel or buttons to zoom · double-click to fit</span>
-      <span class="pill">Evidence snapshot: 01 Sep 2026</span>
-      <span class="pill watch">UAE relevance: WATCH, not confirmed victimization</span>
-    </div>
-  </main>
-
-  <footer>
-    <span>Solid: supported relationship · dashed: observed operational flow · dotted: assessed overlap/context</span>
-    <span>Defensive intelligence visualization</span>
-  </footer>
-
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">42</div>
+        <div><div class="eyebrow">Threat intelligence · evidence map</div><h1>APT42 — Intrusion &amp; Targeting Map</h1><div class="subtitle">Identity → social engineering → credential or malware access → strategic collection</div></div>
+      </div>
+      <div class="signal-strip" aria-label="Analysis summary">
+        <div class="signal confidence"><strong>High confidence</strong><span>IRGC-IO nexus</span></div>
+        <div class="signal paths"><strong>2 intrusion paths</strong><span>Identity + malware</span></div>
+        <div class="signal victims"><strong>3 named geographies</strong><span>US · UK · Israel</span></div>
+      </div>
+      <div class="header-actions">
+        <a class="download-button" href="APT42_Threat_Actor_Analysis.netdraw.json" download>Source JSON</a>
+        <a class="download-button" href="APT42_Threat_Actor_Analysis.svg" download>Export SVG</a>
+        <button class="icon-button" id="fullscreen" type="button" title="Enter fullscreen" aria-label="Enter fullscreen">⛶</button>
+      </div>
+    </header>
+    <main>
+      <div id="viewer" aria-label="Interactive APT42 relationship graph"><div class="loading" id="loading">Loading intelligence map</div><div id="stage" role="img" aria-label="APT42 intrusion and victim-profile relationship diagram"></div></div>
+      <aside class="intel-card glass" id="intelCard" aria-label="Analytic summary">
+        <div class="card-top"><div><div class="card-kicker">Analytic summary</div><h2 class="card-title">Human trust is the access layer</h2></div><button class="close-card" id="closeCard" type="button" aria-label="Hide analytic summary">×</button></div>
+        <p class="assessment">APT42 builds credibility through tailored personas and sustained dialogue, then pivots to credential capture or a malware-backed foothold for intelligence collection.</p>
+        <div class="facts"><div class="fact"><i></i><span>Credential operations target passwords and authentication material before cloud access.</span></div><div class="fact"><i></i><span>NICECURL and TAMECAT form the alternate workstation-access branch.</span></div><div class="fact"><i></i><span>Victim sectors include government, media, civil society, academia, legal services and defense policy.</span></div></div>
+        <div class="source-line">Evidence snapshot · 01 Sep 2026 · Public first-party reporting</div>
+      </aside>
+      <button class="icon-button reopen-card glass" id="reopenCard" type="button" title="Show analytic summary" aria-label="Show analytic summary">i</button>
+      <div class="legend glass" aria-label="Relationship legend"><span><i></i>supported relationship</span><span><i class="dashed"></i>observed flow</span><span><i class="dotted"></i>assessed context</span></div>
+      <nav class="story-dock glass" aria-label="Investigation views">
+        <div class="dock-label">Explore</div>
+        <div class="chapters"><button class="chapter active" data-view="overview" data-key="0" type="button">Overview</button><button class="chapter" data-view="identity" data-key="1" type="button">Attribution</button><button class="chapter" data-view="social" data-key="2" type="button">Social engineering</button><button class="chapter" data-view="credentials" data-key="3" type="button">Credential path</button><button class="chapter" data-view="malware" data-key="4" type="button">Malware path</button><button class="chapter" data-view="victims" data-key="5" type="button">Victim profile</button></div>
+        <div class="dock-actions"><button class="icon-button" id="zoomOut" type="button" title="Zoom out" aria-label="Zoom out">−</button><button class="icon-button" id="zoomIn" type="button" title="Zoom in" aria-label="Zoom in">+</button></div>
+      </nav>
+      <div class="tooltip glass" id="tooltip" role="status" aria-live="polite"></div>
+    </main>
+  </div>
   <script>
-    const viewer = document.getElementById('viewer');
-    const stage = document.getElementById('stage');
-    let svg;
-    let base = { x: -40, y: -4, w: 1890, h: 1024 };
-    let view = { ...base };
-    let drag = null;
-
-    function applyView() {
-      if (svg) svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
-    }
-    function fit() { view = { ...base }; applyView(); }
-    function zoom(factor, cx = view.x + view.w / 2, cy = view.y + view.h / 2) {
-      const nextW = Math.max(280, Math.min(base.w * 2.5, view.w * factor));
-      const nextH = nextW * (view.h / view.w);
-      const rx = (cx - view.x) / view.w;
-      const ry = (cy - view.y) / view.h;
-      view = { x: cx - nextW * rx, y: cy - nextH * ry, w: nextW, h: nextH };
-      applyView();
-    }
-    function point(event) {
-      const r = viewer.getBoundingClientRect();
-      return {
-        x: view.x + (event.clientX - r.left) / r.width * view.w,
-        y: view.y + (event.clientY - r.top) / r.height * view.h
-      };
-    }
-
-    fetch('APT42_Threat_Actor_Analysis.svg')
-      .then(r => { if (!r.ok) throw new Error('SVG unavailable'); return r.text(); })
-      .then(text => {
-        stage.innerHTML = text;
-        svg = stage.querySelector('svg');
-        const vb = svg.viewBox.baseVal;
-        base = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
-        fit();
-      })
-      .catch(() => { stage.textContent = 'The APT42 diagram could not be loaded.'; });
-
-    viewer.addEventListener('wheel', event => {
-      event.preventDefault();
-      const p = point(event);
-      zoom(event.deltaY > 0 ? 1.12 : .89, p.x, p.y);
-    }, { passive: false });
-    viewer.addEventListener('pointerdown', event => {
-      drag = { p: point(event), view: { ...view } };
-      viewer.classList.add('dragging');
-      viewer.setPointerCapture(event.pointerId);
-    });
-    viewer.addEventListener('pointermove', event => {
-      if (!drag) return;
-      const p = point(event);
-      view.x = drag.view.x - (p.x - drag.p.x);
-      view.y = drag.view.y - (p.y - drag.p.y);
-      applyView();
-    });
-    viewer.addEventListener('pointerup', () => { drag = null; viewer.classList.remove('dragging'); });
-    viewer.addEventListener('pointercancel', () => { drag = null; viewer.classList.remove('dragging'); });
-    viewer.addEventListener('dblclick', fit);
-    document.getElementById('zoomIn').addEventListener('click', () => zoom(.82));
-    document.getElementById('zoomOut').addEventListener('click', () => zoom(1.22));
-    document.getElementById('fit').addEventListener('click', fit);
+    const viewer=document.getElementById('viewer'),stage=document.getElementById('stage'),tooltip=document.getElementById('tooltip'),intelCard=document.getElementById('intelCard');
+    let svg,base={x:-40,y:-4,w:1890,h:1024},view={...base},drag=null;
+    const views={overview:{x:-40,y:-4,w:1890,h:1024,nodes:[]},identity:{x:0,y:45,w:430,h:930,nodes:['actor','aliases','nexus','scope']},social:{x:350,y:70,w:760,h:430,nodes:['recon','persona','rapport','phish','lure']},credentials:{x:1020,y:55,w:820,h:445,nodes:['credcap','valid','cloudacct','collect','exfil']},malware:{x:360,y:455,w:790,h:550,nodes:['mal_lure','nicecurl','tamecat','c2']},victims:{x:1060,y:455,w:760,h:550,nodes:['targethub','gov','civil','media','defense','geographies']}};
+    const notes={actor:['APT42 / CALANQUE ION','Iranian cyber-espionage actor assessed by Mandiant to operate on behalf of the IRGC Intelligence Organization.'],nexus:['IRGC-IO nexus','High-confidence intelligence assessment supported by first-party threat reporting.'],persona:['Impersonated persona','Journalists, researchers, event organizers, think-tank staff and security professionals are used to establish credibility.'],rapport:['Trust-building contact','Benign correspondence can continue before the target is moved to a lure or another channel.'],phish:['Credential spearphishing','Links, benign-looking PDFs and messaging services deliver credential-harvesting pages.'],credcap:['Credential + MFA capture','Observed kits collect passwords, authentication codes, device PINs and recovery material.'],cloudacct:['Cloud-account compromise','Stolen authentication material enables access to personal and corporate mailboxes and cloud data.'],nicecurl:['NICECURL','Custom VBScript backdoor supporting module download and command execution over HTTPS.'],tamecat:['TAMECAT','Custom PowerShell toehold capable of executing PowerShell or C# content.'],targethub:['Strategic targeting','Collection priorities concentrate on people with access to foreign-policy, national-security and civil-society information.'],geographies:['Confirmed victim geographies','Public reporting explicitly identifies the United States, United Kingdom and Israel.']};
+    function applyView(animate=false){if(!svg)return;if(!animate){svg.setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h}`);return}const start={x:svg.viewBox.baseVal.x,y:svg.viewBox.baseVal.y,w:svg.viewBox.baseVal.width,h:svg.viewBox.baseVal.height},target={...view},started=performance.now(),duration=560;function frame(now){const p=Math.min(1,(now-started)/duration),e=1-Math.pow(1-p,3),next={};for(const key of ['x','y','w','h'])next[key]=start[key]+(target[key]-start[key])*e;svg.setAttribute('viewBox',`${next.x} ${next.y} ${next.w} ${next.h}`);if(p<1)requestAnimationFrame(frame)}requestAnimationFrame(frame)}
+    function setView(name,animate=true){const preset=views[name]||views.overview;view={x:preset.x,y:preset.y,w:preset.w,h:preset.h};document.querySelectorAll('.chapter').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(svg)svg.querySelectorAll('.nodeg').forEach(n=>n.classList.toggle('selected',preset.nodes.includes(n.dataset.node)));applyView(animate)}
+    function zoom(factor,cx=view.x+view.w/2,cy=view.y+view.h/2){const nextW=Math.max(250,Math.min(base.w*2.4,view.w*factor)),nextH=nextW*(view.h/view.w),rx=(cx-view.x)/view.w,ry=(cy-view.y)/view.h;view={x:cx-nextW*rx,y:cy-nextH*ry,w:nextW,h:nextH};document.querySelectorAll('.chapter').forEach(b=>b.classList.remove('active'));applyView()}
+    function point(e){const r=viewer.getBoundingClientRect();return{x:view.x+(e.clientX-r.left)/r.width*view.w,y:view.y+(e.clientY-r.top)/r.height*view.h}}
+    function moveTooltip(e){const r=document.querySelector('main').getBoundingClientRect(),x=Math.min(r.width-278,Math.max(12,e.clientX-r.left+16)),y=Math.min(r.height-120,Math.max(12,e.clientY-r.top+16));tooltip.style.left=`${x}px`;tooltip.style.top=`${y}px`}
+    function attachGraphInteractions(){['e05','e06','e07','e08','e09','e10','e11','e12','e14','e15','e16','e17','e18'].forEach(id=>svg.querySelector(`[data-edge="${id}"]`)?.classList.add('flow'));svg.querySelectorAll('.nodeg').forEach(node=>{const entry=notes[node.dataset.node];if(!entry)return;node.addEventListener('pointerenter',e=>{tooltip.innerHTML=`<strong>${entry[0]}</strong><span>${entry[1]}</span>`;tooltip.classList.add('visible');moveTooltip(e)});node.addEventListener('pointermove',moveTooltip);node.addEventListener('pointerleave',()=>tooltip.classList.remove('visible'))})}
+    fetch('APT42_Threat_Actor_Analysis.svg').then(r=>{if(!r.ok)throw new Error('SVG unavailable');return r.text()}).then(text=>{stage.innerHTML=text;svg=stage.querySelector('svg');const vb=svg.viewBox.baseVal;base={x:vb.x,y:vb.y,w:vb.width,h:vb.height};views.overview={...base,nodes:[]};setView('overview',false);attachGraphInteractions();if(matchMedia('(max-width:700px)').matches)intelCard.classList.add('collapsed');document.getElementById('loading').remove();requestAnimationFrame(()=>stage.classList.add('ready'))}).catch(()=>{document.getElementById('loading').textContent='The intelligence map could not be loaded.'});
+    viewer.addEventListener('wheel',e=>{e.preventDefault();const p=point(e);zoom(e.deltaY>0?1.1:.9,p.x,p.y)},{passive:false});
+    viewer.addEventListener('pointerdown',e=>{if(e.target.closest('.nodeg'))return;drag={p:point(e),view:{...view}};viewer.classList.add('dragging');viewer.setPointerCapture(e.pointerId)});
+    viewer.addEventListener('pointermove',e=>{if(!drag)return;const p=point(e);view.x=drag.view.x-(p.x-drag.p.x);view.y=drag.view.y-(p.y-drag.p.y);applyView()});
+    viewer.addEventListener('pointerup',()=>{drag=null;viewer.classList.remove('dragging')});viewer.addEventListener('pointercancel',()=>{drag=null;viewer.classList.remove('dragging')});viewer.addEventListener('dblclick',()=>setView('overview'));
+    document.querySelectorAll('.chapter').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));document.getElementById('zoomIn').addEventListener('click',()=>zoom(.82));document.getElementById('zoomOut').addEventListener('click',()=>zoom(1.22));document.getElementById('closeCard').addEventListener('click',()=>intelCard.classList.add('collapsed'));document.getElementById('reopenCard').addEventListener('click',()=>intelCard.classList.remove('collapsed'));document.getElementById('fullscreen').addEventListener('click',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()});
+    document.addEventListener('keydown',e=>{const map={'0':'overview','1':'identity','2':'social','3':'credentials','4':'malware','5':'victims'};if(map[e.key])setView(map[e.key]);if(e.key==='Escape'&&!document.fullscreenElement)intelCard.classList.add('collapsed')});
   </script>
 </body>
 </html>

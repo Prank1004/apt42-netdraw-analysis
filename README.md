@@ -11,7 +11,7 @@ The repository contains:
 
 ## Scope and caveat
 
-The graph separates human-led credential operations from malware-enabled access and collection. UAE relevance is shown as **WATCH**, not confirmed victimization: historical regional targeting and UAE media impersonation do not establish a current UAE victim or active UAE infrastructure.
+The graph separates human-led credential operations from malware-enabled access and collection. Victim geography is limited to countries explicitly identified in the cited public reporting: the United States, United Kingdom and Israel. Impersonated brands are not treated as victims.
 
 ## Public references
 
